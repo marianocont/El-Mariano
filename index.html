@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Blog</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEAg3QhqLMpG8r+Knujsl5+M5WMJp2fF/0U8bsXSkFYYZf5Z4G5CJew9qjiTN" crossorigin="anonymous">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">Mi Blog</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Inicio</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Acerca de</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Contacto</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-lg-8">
+                <h1 class="mb-4">Últimas Entradas</h1>
+                <div id="blog-entries" class="list-group">
+                    <!-- Aquí se cargarán las entradas de blog -->
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <h2 class="mb-4">Categorías</h2>
+                <ul class="list-group">
+                    <li class="list-group-item">Categoría 1</li>
+                    <li class="list-group-item">Categoría 2</li>
+                    <li class="list-group-item">Categoría 3</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <footer class="bg-dark text-white text-center py-4 mt-4">
+        <div class="container">
+            <span>&copy; 2024 Mi Blog</span>
+        </div>
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha384-KyZXEAg3QhqLMpG8r+Knujsl5+M5WMJp2fF/0U8bsXSkFYYZf5Z4G5CJew9qjiTN" crossorigin="anonymous"></script>
+    <script>
+        $(document).ready(function() {
+            $.ajax({
+                url: "_posts", // Ruta a la carpeta donde se encuentran los archivos Markdown
+                success: function(data) {
+                    $(data).find("a[href$='.md']").each(function() {
+                        var entryUrl = $(this).attr("href");
+                        var entryTitle = entryUrl.split("/").pop().replace(/-/g, " ").replace(".md", "");
+                        $("#blog-entries").append('<a href="' + entryUrl + '" class="list-group-item list-group-item-action">' + entryTitle + '</a>');
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
