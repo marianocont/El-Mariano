@@ -60,18 +60,22 @@
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha384-KyZXEAg3QhqLMpG8r+Knujsl5+M5WMJp2fF/0U8bsXSkFYYZf5Z4G5CJew9qjiTN" crossorigin="anonymous"></script>
     <script>
-        $(document).ready(function() {
-            $.ajax({
-                url: "_posts", // Ruta a la carpeta donde se encuentran los archivos Markdown
-                success: function(data) {
-                    $(data).find("a[href$='.md']").each(function() {
-                        var entryUrl = $(this).attr("href");
-                        var entryTitle = entryUrl.split("/").pop().replace(/-/g, " ").replace(".md", "");
-                        $("#blog-entries").append('<a href="' + entryUrl + '" class="list-group-item list-group-item-action">' + entryTitle + '</a>');
-                    });
-                }
+        fetch('https://api.github.com/repos/marianocont/El-Mariano/contents/_posts')
+            .then(response => response.json())
+            .then(data => {
+                // Iterar sobre los archivos en la carpeta _posts
+                data.forEach(file => {
+                    // Obtener el contenido de cada archivo Markdown
+                    fetch(file.download_url)
+                        .then(response => response.text())
+                        .then(markdown => {
+                            // Convertir el contenido Markdown a HTML
+                            const html = marked(markdown);
+                            // Agregar una entrada de blog al listado
+                            document.getElementById('blog-list').innerHTML += `<li>${html}</li>`;
+                        });
+                });
             });
-        });
     </script>
 </body>
 </html>
